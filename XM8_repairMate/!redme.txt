@@ -1,5 +1,3 @@
-# XM8_repairMate
-
 --Repair Mate script for Exile mod--
 This script adds more advanced repair mechanics to Exile.
 Deferent items can be used to perform repair, some will be
@@ -28,4 +26,3 @@ Future plans
 	-Change "XM8_apps_app1" to application number you like.
 - Change XM8_repairMate\XM8_repairMate_costConfig.sqf to your liking.
 - Enjoy!
-
