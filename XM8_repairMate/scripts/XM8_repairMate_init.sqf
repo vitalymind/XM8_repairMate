@@ -10,11 +10,13 @@ Vehicle repair script
 */
 
 private ["_error","_code","_unloadScript"];
+params ["_root"];
 
 //Mulfunction checks
-if (isNil "XM8_apps_folderPath") exitWith {_error = "XM8_repairMate error: XM8_apps is not preperly inited"; systemChat _error; diag_log _error;};
+if (isNil "_root") exitWith {_error = "XM8_repairMate error: Check XM8_apps_config.sqf path given incorrectly"; systemChat _error; diag_log _error;};
 
 //Inittialize variables
+XM8_repairMate_path = _root;
 XM8_repairMate_vehicle = objNull;
 XM8_repairMate_vehicleType = "";
 XM8_repairMate_slideInited = false;
@@ -32,13 +34,11 @@ XM8_repairMate_avionicsParts = [];
 
 //Inittialize functions
 {
-	//if (isNil _x) then {
-		//_code = compileFinal (preprocessFileLineNumbers format (["%1XM8_repairMate\scripts\%2.sqf",XM8_apps_folderPath, _x]));                    
-		_code = compile (preprocessFileLineNumbers format (["%1XM8_repairMate\scripts\%2.sqf",XM8_apps_folderPath, _x]));                    
-		//if (isNil "_code") then {_code = compileFinal ""};
-		if (isNil "_code") then {_code = compile ""};
+	if (isNil _x) then {
+		_code = compileFinal (preprocessFileLineNumbers format (["%1XM8_repairMate\scripts\%2.sqf",XM8_repairMate_path, _x]));                              
+		if (isNil "_code") then {_code = compileFinal ""};
 		missionNamespace setVariable [_x, _code];
-	//};
+	};
 } forEach [
 	"XM8_rapairMate_perform",
 	"XM8_repairMate_checkGear",
@@ -51,16 +51,18 @@ XM8_repairMate_avionicsParts = [];
 ];
 
 //Initialize configs and stringtable
-//if (isNil "XM8_repairMate_costConfig") then {
-	call compile preProcessFileLineNumbers format ["%1%2",XM8_apps_folderPath, "XM8_repairMate\XM8_repairMate_costConfig.sqf"];
-	call compile preProcessFileLineNumbers format ["%1%2",XM8_apps_folderPath, "XM8_repairMate\XM8_repairMate_optionalConfigs.sqf"];
-	call compile preProcessFileLineNumbers format ["%1%2",XM8_apps_folderPath, "XM8_repairMate\XM8_repairMate_stringtable.sqf"];
-//};
+if (isNil "XM8_repairMate_costConfig") then {
+	call compile preProcessFileLineNumbers format ["%1%2",XM8_repairMate_path, "XM8_repairMate\XM8_repairMate_costConfig.sqf"];
+	call compile preProcessFileLineNumbers format ["%1%2",XM8_repairMate_path, "XM8_repairMate\XM8_repairMate_optionalConfigs.sqf"];
+	call compile preProcessFileLineNumbers format ["%1%2",XM8_repairMate_path, "XM8_repairMate\XM8_repairMate_stringtable.sqf"];
+};
 
 //Initialize eventHandlers
 _unloadScript = '
 	XM8_repairMate_slideInited = nil;
-	ExileClientXM8CurrentSlide = "sideApps";
+	if (ExileClientXM8CurrentSlide == "repairMate") then {
+		ExileClientXM8CurrentSlide = "sideApps";
+	};
 	XM8_repairMate_vehicle = nil;
 	XM8_repairMate_vehicleType = nil;
 	XM8_repairMate_selectedPart = nil;

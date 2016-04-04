@@ -79,10 +79,10 @@ for "_i" from 1 to 10 do {
 {(_x call _getControl) ctrlSetText ""; (_x call _getControl) ctrlEnable false;} forEach ["leftToolsBut","rightToolsBut","leftMatBut","rightMatBut"];
 
 if (XM8_repairMate_vehicleType == "Car") then {
-	_pic = format ["%1XM8_repairMate\icons\car_%2.paa",XM8_apps_folderPath,"main"];
+	_pic = format ["%1XM8_repairMate\icons\car_%2.paa",XM8_repairMate_path,"main"];
 	[("vehPicMain" call _getControl),[7.5*_pW,-8.4*_pH,26*_pW,24*_pH],_pic,[1,1,1,1],false,""] call _setPictureControl;
 	for "_i" from 1 to 5 do {
-		_pic = format ["%1XM8_repairMate\icons\car_%2.paa",XM8_apps_folderPath,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
+		_pic = format ["%1XM8_repairMate\icons\car_%2.paa",XM8_repairMate_path,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
 		[((format ["vehPic_L%1",_i]) call _getControl),[7.5*_pW,-8.4*_pH,26*_pW,24*_pH],_pic,[1,1,1,0],false,""] call _setPictureControl;
 	};
 	{
@@ -107,7 +107,7 @@ if (XM8_repairMate_vehicleType == "Car") then {
 	for "_i" from 1 to 5 do {
 		_color = [0.8,0,0,0.1];
 		_color set [3,0.1 * (_avarageDamage select (_i - 1))];
-		_pic = format ["%1XM8_repairMate\icons\car_%2_a.paa",XM8_apps_folderPath,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
+		_pic = format ["%1XM8_repairMate\icons\car_%2_a.paa",XM8_repairMate_path,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
 		[((format ["vehPicMask_L%1",_i]) call _getControl),[7.5*_pW,-8.4*_pH,26*_pW,24*_pH],_pic,_color,false,""] call _setPictureControl;
 	};
 	XM8_repairMate_selectedPart call XM8_rapairMate_selectPart;

@@ -1,4 +1,4 @@
---Repair Mate script for Exile mod--
+Repair Mate script for Exile mod
 This script adds more advanced repair mechanics to Exile.
 Deferent items can be used to perform repair, some will be
 consumed as materials others are used as tools.
@@ -15,14 +15,25 @@ code - vitaly'mind'chizhikov
 Future plans
 1. Support for helicopters (mostly done, will be added soon)
 
----INSTALLATION---
-- Paste XM8_repairMate folder to the same folder as you placed XM8_apps folder.
-- Add following lines to XM8_apps\XM8_apps_config.sqf. Adjust path to folder according to where you put it.
+INSTALLATION
+1) Paste XM8_repairMate folder to the root of mission folder.
+2) Add following lines to XM8_apps\XM8_apps_config.sqf. 
 	XM8_apps_app1 = [
 		"Repair Mate",
-		"custom\XM8_repairMate\icons\repairMate_icon.paa",
-		{0 execVM "custom\XM8_repairMate\scripts\XM8_repairMate_init.sqf"}
+		"XM8_repairMate\icons\repairMate_icon.paa",
+		{"" execVM "XM8_repairMate\scripts\XM8_repairMate_init.sqf"}
 	];
-	-Change "XM8_apps_app1" to application number you like.
-- Change XM8_repairMate\XM8_repairMate_costConfig.sqf to your liking.
-- Enjoy!
+		Change "XM8_apps_app1" to application number you like, from 1 to 13.
+3) Add class "repairMate" to class CfgXM8 inside XM8_apps_sliders.hpp
+	This step is done by default.
+	class CfgXM8 {
+		...
+		class repairMate {
+			controlID = 960050;
+			title = "Repair Mate";
+		};
+		...
+	};
+4) Change XM8_repairMate\XM8_repairMate_costConfig.sqf to your liking.
+5) Enjoy!
+
