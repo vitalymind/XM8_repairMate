@@ -18,12 +18,17 @@ _display = uiNameSpace getVariable ["RscExileXM8", displayNull];
 if (isNull _display) exitWith {diag_log "Error loading XM8 RepairMate, display is null"};
 
 _getControl = {
-	params ["_key"]; private ["_ctrl","_idc","_index"]; 
+	params ["_key"]; 
+	private ["_ctrl","_idc","_index","_slideClassName"]; 
 	_ctrl = controlNull;
-	_index = XM8_repairMate_IDClist find _key;
-	_idc = if (_index != -1) then {((getNumber (missionConfigFile >> "CfgXM8" >> "repairMate" >> "controlID")) + _index)} else {-1};
-	_ctrl = _display displayCtrl _Idc;
-	_ctrl
+	_slideClassName = "repairMate";
+	_map = XM8_repairMate_repairMateIDCmap;
+	_index = _map find _key;
+	if (_index != -1) then {
+		_idc = ((getNumber (missionConfigFile >> "CfgXM8" >> _slideClassName >> "controlID")) + _index);
+		_ctrl = _display displayCtrl _idc;
+	};
+	_ctrl;
 };
 
 _part = ""; _layer = -1; _ctrl = controlNull;

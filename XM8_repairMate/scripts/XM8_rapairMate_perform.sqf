@@ -19,12 +19,17 @@ _pH = 0.04;
 _display = uiNameSpace getVariable ["RscExileXM8", displayNull];
 if (isNull _display) exitWith {diag_log "Error loading XM8 RepairMate, display is null"};
 _getControl = {
-	params ["_key"]; private ["_ctrl","_idc","_index"]; 
+	params ["_key"]; 
+	private ["_ctrl","_idc","_index","_slideClassName"]; 
 	_ctrl = controlNull;
-	_index = XM8_repairMate_IDClist find _key;
-	_idc = if (_index != -1) then {((getNumber (missionConfigFile >> "CfgXM8" >> "repairMate" >> "controlID")) + _index)} else {-1};
-	_ctrl = _display displayCtrl _Idc;
-	_ctrl
+	_slideClassName = "repairMate";
+	_map = XM8_repairMate_repairMateIDCmap;
+	_index = _map find _key;
+	if (_index != -1) then {
+		_idc = ((getNumber (missionConfigFile >> "CfgXM8" >> _slideClassName >> "controlID")) + _index);
+		_ctrl = _display displayCtrl _idc;
+	};
+	_ctrl;
 };
 
 //Check if repair must be canceled
@@ -201,7 +206,7 @@ XM8_repairMate_vehicle setDamage (_basicDamage - (_basicDamage * _shareOfBasicDa
 } forEach _hitParts;
 
 //Refill slider
-0 call XM8_rapairMate_fillSlider;
+0 call ExileClient_gui_xm8_slide_repairMate_onOpen;
 if (!_silent) then {["PartyCreatedMessage", [(XM8_repairMate_stringtable select 16)]] call ExileClient_gui_notification_event_addNotification};
 
 

@@ -27,4 +27,19 @@ if (count _nearVehicles == 0) then {
 		_result set [1,_vehicle];
 	};
 };
-_result;
+
+_result params ["_type","_vehicle"];
+if (_type == "noVehicles") exitWith {["RepairFailedWarning", [(XM8_repairMate_stringtable select 0)]] call ExileClient_gui_notification_event_addNotification};
+if (_type == "vehicleIsNotLocal") exitWith {["RepairFailedWarning", [(XM8_repairMate_stringtable select 1)]] call ExileClient_gui_notification_event_addNotification};
+//Temporary not supported vehicle classes
+if (_type == "Helicopter") exitWith {["RepairFailedWarning", [(XM8_repairMate_stringtable select 2)]] call ExileClient_gui_notification_event_addNotification};
+if (_type == "Tank") exitWith {["RepairFailedWarning", [(XM8_repairMate_stringtable select 3)]] call ExileClient_gui_notification_event_addNotification};
+
+if ((damage _vehicle) == 1) exitWith {["RepairFailedWarning", [(XM8_repairMate_stringtable select 4)]] call ExileClient_gui_notification_event_addNotification};
+if (_type == "Car") then {
+	XM8_repairMate_selectedPart = "car_engine";
+};
+XM8_repairMate_vehicle = _vehicle;
+XM8_repairMate_vehicleType = _type;
+
+["repairMate", 0] call ExileClient_gui_xm8_slide;

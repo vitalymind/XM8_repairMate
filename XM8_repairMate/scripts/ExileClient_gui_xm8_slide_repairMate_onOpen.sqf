@@ -1,12 +1,14 @@
+/*	XM8 RepairMate by vitaly'mind'chizhikov
+	
+	Vehicle repair script.
+	Forum thread
+*/
 /*
-function: XM8_rapairMate_fillSlider
-file: XM8_repairMate\scripts\XM8_rapairMate_fillSlider.sqf
-
-INPUT: NOTHING
-OUTPUT: NOTHING
-
-XM8 RepairMate by vitaly'mind'chizhikov
-Vehicle repair script
+	file: XM8_repairMate\scripts\ExileClient_gui_xm8_slide_repairMate_onOpen.sqf
+	function: ExileClient_gui_xm8_slide_repairMate_onOpen
+	
+	This script will be executed everytime when related slide opened.
+	It is best place to update slide (show players money for example).
 */
 
 private ["_pW","_pH","_display","_getControl","_setPictureControl","_setSTextControl","_setBackgroundControl",
@@ -16,12 +18,17 @@ _pH = 0.04;
 _display = uiNameSpace getVariable ["RscExileXM8", displayNull];
 if (isNull _display) exitWith {diag_log "Error loading XM8 RepairMate, display is null"};
 _getControl = {
-	params ["_key"]; private ["_ctrl","_idc","_index"]; 
+	params ["_key"]; 
+	private ["_ctrl","_idc","_index","_slideClassName"]; 
 	_ctrl = controlNull;
-	_index = XM8_repairMate_IDClist find _key;
-	_idc = if (_index != -1) then {((getNumber (missionConfigFile >> "CfgXM8" >> "repairMate" >> "controlID")) + _index)} else {-1};
-	_ctrl = _display displayCtrl _Idc;
-	_ctrl
+	_slideClassName = "repairMate";
+	_map = XM8_repairMate_repairMateIDCmap;
+	_index = _map find _key;
+	if (_index != -1) then {
+		_idc = ((getNumber (missionConfigFile >> "CfgXM8" >> _slideClassName >> "controlID")) + _index);
+		_ctrl = _display displayCtrl _idc;
+	};
+	_ctrl;
 };
 _setPictureControl = {
 	params ["_ctrl","_pos","_pic","_color","_enable","_tooltip"];
@@ -79,10 +86,10 @@ for "_i" from 1 to 10 do {
 {(_x call _getControl) ctrlSetText ""; (_x call _getControl) ctrlEnable false;} forEach ["leftToolsBut","rightToolsBut","leftMatBut","rightMatBut"];
 
 if (XM8_repairMate_vehicleType == "Car") then {
-	_pic = format ["%1XM8_repairMate\icons\car_%2.paa",XM8_repairMate_path,"main"];
+	_pic = format ["%1icons\car_%2.paa",XM8_repairMate_path,"main"];
 	[("vehPicMain" call _getControl),[7.5*_pW,-8.4*_pH,26*_pW,24*_pH],_pic,[1,1,1,1],false,""] call _setPictureControl;
 	for "_i" from 1 to 5 do {
-		_pic = format ["%1XM8_repairMate\icons\car_%2.paa",XM8_repairMate_path,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
+		_pic = format ["%1icons\car_%2.paa",XM8_repairMate_path,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
 		[((format ["vehPic_L%1",_i]) call _getControl),[7.5*_pW,-8.4*_pH,26*_pW,24*_pH],_pic,[1,1,1,0],false,""] call _setPictureControl;
 	};
 	{
@@ -107,7 +114,7 @@ if (XM8_repairMate_vehicleType == "Car") then {
 	for "_i" from 1 to 5 do {
 		_color = [0.8,0,0,0.1];
 		_color set [3,0.1 * (_avarageDamage select (_i - 1))];
-		_pic = format ["%1XM8_repairMate\icons\car_%2_a.paa",XM8_repairMate_path,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
+		_pic = format ["%1icons\car_%2_a.paa",XM8_repairMate_path,(["wheels","engine","body","glass","fuel"] select (_i - 1))];
 		[((format ["vehPicMask_L%1",_i]) call _getControl),[7.5*_pW,-8.4*_pH,26*_pW,24*_pH],_pic,_color,false,""] call _setPictureControl;
 	};
 	XM8_repairMate_selectedPart call XM8_rapairMate_selectPart;

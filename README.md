@@ -16,27 +16,32 @@ code - vitaly'mind'chizhikov
 
 Future plans
 1. Support for helicopters (mostly done, will be added soon)
+2. Support for boats (WIP)
 
 INSTALLATION
-1) Paste XM8_repairMate folder to the root of mission folder.
-2) Add following lines to XM8_apps\XM8_apps_config.sqf. 
-	XM8_apps_app1 = [
+1) Copy XM8_repairMate folder to XM8_apps\apps\ folder.
+2) Edit "XM8_apps/XM8_apps_config.sqf"
+	Uncomment next available app, and change it`s contents to
+	XM8_apps_app<availableAppNumber> = [
 		"Repair Mate",
-		"XM8_repairMate\icons\repairMate_icon.paa",
-		{"" execVM "XM8_repairMate\scripts\XM8_repairMate_init.sqf"}
+		"XM8_apps\apps\XM8_repairMate\icons\repairMate_icon.paa", //FULL PATH FROM MISSION ROOT
+		{call XM8_repairMate_checkNearByVehicles},
+		true,
+		"XM8_apps\apps\XM8_repairMate\scripts\XM8_repairMate_init.sqf" //FULL PATH FROM MISSION ROOT
 	];
-		Change "XM8_apps_app1" to application number you like, from 1 to 13.
-3) Add class "repairMate" to class CfgXM8 inside XM8_apps_sliders.hpp
-	This step is done by default.
+3) Edit "XM8_apps/XM8_apps_sliders.hpp"
+	Add repairMate class
 	class CfgXM8 {
 		...
+		<other classes>
+		...
+		//This slide use IDCs from 960050 to 960140
 		class repairMate {
 			controlID = 960050;
 			title = "Repair Mate";
+			onLoadScript = "XM8_apps\apps\XM8_repairMate\scripts\XM8_repairMate_repairMate_onLoad.sqf"; //FULL PATH FROM MISSION ROOT
 		};
-		...
 	};
 4) Change XM8_repairMate\XM8_repairMate_costConfig.sqf to your liking.
 5) Enjoy!
-
 
